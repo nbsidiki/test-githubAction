@@ -60,3 +60,25 @@ jobs:
         with:
           coverageFile: coverage.xml
           token: ${{secret.EPSI_TOKEN}}
+    needs: [build]
+
+  notify:
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    needs: [coverage]
+    steps:
+      - name: Discord success notification
+        if: ${{ needs.coverage.result == 'success' }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "The CI of {{ EVENT_PAYLOAD.repository.full_name }} is green! :white_check_mark:"
+
+      - name: Discord failed notification
+        if: ${{ needs.coverage.result != 'success' }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "The CI of {{ EVENT_PAYLOAD.repository.full_name }} is red! :x:"
