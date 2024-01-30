@@ -43,9 +43,7 @@ jobs:
           cache: "pip"
 
       - name: Installation des dépendances
-        run: |
-          sudo apt-get install python3
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Coverage
         run: pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
@@ -56,6 +54,9 @@ jobs:
           pytest-coverage-path: pytest-coverage.txt
           junitxml-path: pytest.xml
           github-token: ${{secrets.EPSI_TOKEN}}
+
+      - name: Coverage
+        run: coverage run -m pytest; coverage xml
 
       - name: Get Cover
         uses: orgoro/coverage@v3.1
