@@ -59,7 +59,7 @@ jobs:
         uses: orgoro/coverage@v3.1
         with:
           coverageFile: coverage.xml
-          token: ${{secret.EPSI_TOKEN}}
+          token: ${{secrets.EPSI_TOKEN}}
     needs: [build]
 
   notify:
