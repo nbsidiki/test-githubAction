@@ -43,7 +43,9 @@ jobs:
           cache: "pip"
 
       - name: Installation des dépendances
-        run: pip install -r requirements.txt
+        run: |
+          sudo apt-get install python3
+          pip install -r requirements.txt
 
       - name: Coverage
         run: pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
